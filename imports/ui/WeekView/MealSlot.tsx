@@ -4,6 +4,7 @@ import { Meteor } from "meteor/meteor";
 import { format } from "date-fns";
 import { Recipe } from "/imports/api/Recipes";
 import { ScheduleContext } from "../ScheduleContext";
+import { RecipeTile } from "../RecipeFinder/RecipeTile";
 
 type MealSlotProps = {
   date: Date;
@@ -43,18 +44,15 @@ export const MealSlot: React.FC<MealSlotProps> = ({ date, slot }) => {
   }
 
   return (
-    <div
-      ref={drop}
-      key={slot}
-      className={`border border-dashed rounded-lg px-2 py-1 text-center transition ${clazz}`}
-    >
-      <span className="text-gray-400 italic">
-        {isActive
-          ? "Release to drop"
-          : currentRecipe
-            ? currentRecipe.recipe.name
-            : slot}
-      </span>
+    <div ref={drop} key={slot} className="h-full">
+      {!currentRecipe ? (
+        <span className="text-gray-400 italic">
+          {isActive ? "Release to drop" : slot}
+        </span>
+      ) : (
+        <RecipeTile isVariableHeight={true} recipe={currentRecipe.recipe} />
+        // currentRecipe.recipe.name
+      )}
     </div>
   );
 };

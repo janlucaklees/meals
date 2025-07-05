@@ -4,11 +4,13 @@ import { Recipe } from "/imports/api/Recipes";
 
 type RecipeTileProps = {
   isDragging: boolean;
+  isVariableHeight: boolean;
   recipe: Recipe;
 };
 
 export const RecipeTile: React.FC<RecipeTileProps> = ({
   isDragging,
+  isVariableHeight = false,
   recipe,
 }) => {
   const [{ opacity }, dragRef] = useDrag(
@@ -22,13 +24,29 @@ export const RecipeTile: React.FC<RecipeTileProps> = ({
     [],
   );
 
+  const generateHash = (string) => {
+    let hash = 0;
+    for (const char of string) {
+      hash = (hash << 5) - hash + char.charCodeAt(0);
+      hash |= 0; // Constrain to 32bit integer
+    }
+    return hash;
+  };
+
   return (
     <div
       ref={dragRef}
       style={{ opacity }}
-      className="border border-dashed rounded-lg px-2 py-1 text-center hover:bg-gray-100 transition"
+      className={`${isVariableHeight || "aspect-4/3"} w-full h-full relative border border-gray-400 rounded-lg transition overflow-clip cursor-grab transform-gpu hover:scale-101 hover:shadow-md hover:shadow-gray-400`}
     >
-      <span className="text-gray-400 italic">{recipe.name}</span>
+      <img
+        className="w-full h-full object-cover"
+        src={`https://baconmockup.com/400/${300 + (generateHash(recipe.name) % 100)}`}
+      />
+
+      <div className="absolute inset-x-0 bottom-0 bg-[rgba(0,0,0,0.5)] py-1.5 px-3 text-xl">
+        <span className="text-white font-bold italic">{recipe.name}</span>
+      </div>
     </div>
   );
 };
