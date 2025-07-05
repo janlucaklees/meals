@@ -71,14 +71,3 @@ Meteor.startup(async () => {
     return ScheduleCollection.find();
   });
 });
-
-Meteor.methods({
-  async scheduleRecipe(date: string, slot: string, recipe: Recipe) {
-    await ScheduleCollection.upsertAsync(
-      { date, slot },
-      {
-        $set: { recipe },
-      },
-    );
-  },
-});
