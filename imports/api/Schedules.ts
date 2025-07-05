@@ -9,7 +9,7 @@ export type Schedule = {
   slot: string;
 };
 
-export const ScheduleCollection = new Mongo.Collection<Recipe>("schedules");
+export const ScheduleCollection = new Mongo.Collection<Schedule>("schedules");
 
 if (Meteor.isServer) {
   Meteor.methods({
