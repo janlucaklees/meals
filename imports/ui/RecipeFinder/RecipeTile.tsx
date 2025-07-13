@@ -3,7 +3,7 @@ import { useDrag } from "react-dnd";
 import { Recipe } from "/imports/api/Recipes";
 
 type RecipeTileProps = {
-  isVariableHeight: boolean;
+  isVariableHeight?: boolean;
   recipe: Recipe;
 };
 
