@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useFind, useSubscribe } from "meteor/react-meteor-data";
+import Fuse from "fuse.js";
+
 import { RecipeCollection } from "/imports/api/Recipes";
 import { RecipeTile } from "./RecipeFinder/RecipeTile";
 import { Button } from "./components/Button";
@@ -8,7 +10,21 @@ type RecipeFinderProps = {};
 
 export const RecipeFinder: React.FC<RecipeFinderProps> = ({}) => {
   const isLoading = useSubscribe("recipes");
-  const recipes = useFind(() => RecipeCollection.find());
+  const allRecipes = useFind(() => RecipeCollection.find());
+  const [query, setQuery] = useState("");
+
+  const fuse = useMemo(() => {
+    return new Fuse(allRecipes, {
+      keys: ["name"],
+    });
+  }, [allRecipes]);
+
+  const recipes = useMemo(() => {
+    if (!query.trim()) {
+      return allRecipes;
+    }
+    return fuse.search(query).map((res) => res.item);
+  }, [query, fuse, allRecipes]);
 
   if (isLoading()) {
     return <div>Loading...</div>;
@@ -21,6 +37,8 @@ export const RecipeFinder: React.FC<RecipeFinderProps> = ({}) => {
           type="text"
           className="bg-white rounded-lg border p-2 border-gray-400"
           placeholder="Search Recipes"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
         <Button label="+ Add Recipe" />
       </div>
