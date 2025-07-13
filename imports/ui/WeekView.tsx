@@ -15,8 +15,6 @@ export const WeekView: React.FC<WeekViewProps> = ({ startDate, slots }) => {
   const isLoading = useSubscribe("schedules");
   const schedules = useFind(() => ScheduleCollection.find());
 
-  console.log("s", schedules);
-
   if (isLoading()) {
     return <div>Loading...</div>;
   }
