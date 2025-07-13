@@ -58,15 +58,17 @@ export const MealSlot: React.FC<MealSlotProps> = ({ date, slot }) => {
   }
 
   return (
-    <div ref={drop} key={slot} className="h-full">
+    <div ref={drop} key={slot} className="relative h-full">
       {!currentRecipe ? (
         <span className="text-gray-400 italic">
           {isActive ? "Release to drop" : slot}
         </span>
       ) : (
         <>
-          <Button label="x" onClick={() => clearSlot()} />
           <RecipeTile isVariableHeight={true} recipe={currentRecipe.recipe} />
+          <div className="absolute top-2 right-2 flex justify-end">
+            <Button label="❌" onClick={() => clearSlot()} />
+          </div>
         </>
       )}
     </div>
