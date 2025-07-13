@@ -21,5 +21,8 @@ if (Meteor.isServer) {
         },
       );
     },
+    async removeScheduledRecipe(date: string, slot: string) {
+      await ScheduleCollection.removeAsync({ date, slot });
+    },
   });
 }

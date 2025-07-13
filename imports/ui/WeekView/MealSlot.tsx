@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { Recipe } from "/imports/api/Recipes";
 import { ScheduleContext } from "../ScheduleContext";
 import { RecipeTile } from "../RecipeFinder/RecipeTile";
+import { Button } from "../components/Button";
 
 type MealSlotProps = {
   date: Date;
@@ -34,6 +35,10 @@ export const MealSlot: React.FC<MealSlotProps> = ({ date, slot }) => {
     }),
   }));
 
+  function clearSlot() {
+    Meteor.callAsync("removeScheduledRecipe", format(date, "yyyy-MM-dd"), slot);
+  }
+
   const isActive = canDrop && isOver;
 
   let clazz = "";
@@ -50,8 +55,10 @@ export const MealSlot: React.FC<MealSlotProps> = ({ date, slot }) => {
           {isActive ? "Release to drop" : slot}
         </span>
       ) : (
-        <RecipeTile isVariableHeight={true} recipe={currentRecipe.recipe} />
-        // currentRecipe.recipe.name
+        <>
+          <Button label="x" onClick={() => clearSlot()} />
+          <RecipeTile isVariableHeight={true} recipe={currentRecipe.recipe} />
+        </>
       )}
     </div>
   );
