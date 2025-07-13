@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { Meteor } from "meteor/meteor";
 import { addWeeks, previousSaturday, subWeeks } from "date-fns";
 import { RecipeFinder } from "./RecipeFinder";
 import { WeekView } from "./WeekView";
 import { Button } from "./components/Button";
 
 import "./App.css";
+
+Meteor.loginWithPassword("dev", "password", (err) => {
+  if (err) {
+    console.error("❌ Login failed:", err);
+  } else {
+    console.log("✅ Logged in as dev");
+  }
+});
 
 export const App = () => {
   const [startDate, setStartDtate] = useState(new Date());

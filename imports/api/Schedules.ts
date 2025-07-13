@@ -1,4 +1,3 @@
-import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 
 import { Recipe } from "./Recipes";
@@ -9,20 +8,18 @@ export type Schedule = {
   slot: string;
 };
 
-export const ScheduleCollection = new Mongo.Collection<Schedule>("schedules");
+const ScheduleCollection = new Mongo.Collection<Schedule>("schedules");
 
-if (Meteor.isServer) {
-  Meteor.methods({
-    async scheduleRecipe(date: string, slot: string, recipe: Recipe) {
-      await ScheduleCollection.upsertAsync(
-        { date, slot },
-        {
-          $set: { recipe },
-        },
-      );
-    },
-    async removeScheduledRecipe(date: string, slot: string) {
-      await ScheduleCollection.removeAsync({ date, slot });
-    },
-  });
-}
+ScheduleCollection.allow({
+  insert(userId, doc) {
+    return true;
+  },
+  update(userId, doc) {
+    return true;
+  },
+  remove(userId, doc) {
+    return true;
+  },
+});
+
+export { ScheduleCollection };

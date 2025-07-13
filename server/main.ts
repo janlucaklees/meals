@@ -1,8 +1,22 @@
 import { Meteor } from "meteor/meteor";
 import { Recipe, RecipeCollection } from "/imports/api/Recipes";
+import { Accounts } from "meteor/accounts-base";
 import { ScheduleCollection } from "/imports/api/Schedules";
 
 Meteor.startup(async () => {
+  const user = await Accounts.findUserByUsername("dev");
+
+  if (!user) {
+    Accounts.createUser({
+      username: "dev",
+      password: "password",
+    });
+    console.log("✅ Created test user: dev / devpass");
+  } else {
+    await Accounts.setPasswordAsync(user._id, "password");
+    console.log("✅ Reset dev password");
+  }
+
   if ((await RecipeCollection.find().countAsync()) === 0) {
     const dummyMeals = [
       "Spaghetti Bolognese",

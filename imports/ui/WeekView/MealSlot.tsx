@@ -6,6 +6,7 @@ import { Recipe } from "/imports/api/Recipes";
 import { ScheduleContext } from "../ScheduleContext";
 import { RecipeTile } from "../RecipeFinder/RecipeTile";
 import { Button } from "../components/Button";
+import { ScheduleCollection } from "/imports/api/Schedules";
 
 type MealSlotProps = {
   date: Date;
@@ -21,13 +22,19 @@ export const MealSlot: React.FC<MealSlotProps> = ({ date, slot }) => {
 
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: "recipe",
-    drop: async (recipe) => {
-      Meteor.callAsync(
-        "scheduleRecipe",
-        format(date, "yyyy-MM-dd"),
-        slot,
-        recipe,
-      );
+    drop: async (recipe: Recipe) => {
+      if (currentRecipe) {
+        ScheduleCollection.updateAsync(
+          { _id: currentRecipe._id },
+          { $set: { recipe } },
+        );
+      } else {
+        ScheduleCollection.insertAsync({
+          recipe,
+          date: format(date, "yyyy-MM-dd"),
+          slot,
+        });
+      }
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -36,7 +43,9 @@ export const MealSlot: React.FC<MealSlotProps> = ({ date, slot }) => {
   }));
 
   function clearSlot() {
-    Meteor.callAsync("removeScheduledRecipe", format(date, "yyyy-MM-dd"), slot);
+    if (currentRecipe) {
+      ScheduleCollection.removeAsync({ _id: currentRecipe._id });
+    }
   }
 
   const isActive = canDrop && isOver;
