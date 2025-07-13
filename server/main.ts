@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
-import { Recipe, RecipeCollection } from "/imports/api/Recipes";
 import { Accounts } from "meteor/accounts-base";
+import { RecipeCollection } from "/imports/api/Recipes";
 import { ScheduleCollection } from "/imports/api/Schedules";
 
 Meteor.startup(async () => {

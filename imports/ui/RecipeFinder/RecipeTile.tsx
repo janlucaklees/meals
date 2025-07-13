@@ -3,13 +3,11 @@ import { useDrag } from "react-dnd";
 import { Recipe } from "/imports/api/Recipes";
 
 type RecipeTileProps = {
-  isDragging: boolean;
   isVariableHeight: boolean;
   recipe: Recipe;
 };
 
 export const RecipeTile: React.FC<RecipeTileProps> = ({
-  isDragging,
   isVariableHeight = false,
   recipe,
 }) => {
