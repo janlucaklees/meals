@@ -1,5 +1,6 @@
 import { Mongo } from "meteor/mongo";
 
+import { WithId } from "/imports/types/WithId";
 import { Ingredient } from "./Ingredients";
 
 export type Measurement = {
@@ -7,9 +8,9 @@ export type Measurement = {
   amount: string;
 };
 
-export type Recipe = {
+export type Recipe = WithId<{
   name: string;
   ingredients: Measurement[];
-};
+}>;
 
 export const RecipeCollection = new Mongo.Collection<Recipe>("recipes");

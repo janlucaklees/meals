@@ -27,7 +27,7 @@ export const RecipeFinder: React.FC<RecipeFinderProps> = ({}) => {
       <div className="overflow-y-scroll bg-gray-50">
         <div className="grid grid-cols-7 gap-4 p-4">
           {recipes.map((recipe) => (
-            <RecipeTile recipe={recipe} key={recipe.name} />
+            <RecipeTile recipe={recipe} key={recipe._id} />
           ))}
         </div>
       </div>
